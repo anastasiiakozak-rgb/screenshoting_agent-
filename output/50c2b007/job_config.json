@@ -1,0 +1,1 @@
+{"id": "50c2b007", "name": "Flow: https://cleanmymac.com", "start_url": "https://cleanmymac.com", "first_click": "a[href*='store']", "first_click_fallback_url": "https://macpaw.com/store/cleanmymac", "goal": "Walk through the purchase flow from landing page to checkout. Stop before submitting payment.", "max_steps": 15, "payment": null}

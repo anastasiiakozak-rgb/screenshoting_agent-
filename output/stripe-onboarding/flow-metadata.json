@@ -1,0 +1,60 @@
+{
+  "id": "stripe-onboarding",
+  "name": "Stripe Onboarding",
+  "type": "onboarding",
+  "captured_at": "2026-03-03T17:20:01.055917",
+  "step_count": 3,
+  "steps": [
+    {
+      "index": 0,
+      "screenshot_path": "output/stripe-onboarding/screenshots/step-000.png",
+      "url": "https://dashboard.stripe.com/register",
+      "title": "Sign Up and Create a Stripe Account | Stripe",
+      "timestamp": "2026-03-03T17:19:48.595577",
+      "label": "Account Registration Form",
+      "step_type": "form",
+      "description": "User sees a Stripe account creation form requesting email, full name, password, and country selection.",
+      "next_action": {
+        "type": "fill",
+        "selector": "input[type='email']",
+        "value": "test@example.com",
+        "description": "Filling in the email address field"
+      },
+      "is_flow_complete": false
+    },
+    {
+      "index": 1,
+      "screenshot_path": "output/stripe-onboarding/screenshots/step-001.png",
+      "url": "https://dashboard.stripe.com/register",
+      "title": "Sign Up and Create a Stripe Account | Stripe",
+      "timestamp": "2026-03-03T17:19:53.833954",
+      "label": "Account Registration Form",
+      "step_type": "form",
+      "description": "User sees a Stripe account creation form requesting email, full name, password, and country selection.",
+      "next_action": {
+        "type": "fill",
+        "selector": "input[name='full_name']",
+        "value": "John Smith",
+        "description": "Filling in the full name field"
+      },
+      "is_flow_complete": false
+    },
+    {
+      "index": 2,
+      "screenshot_path": "output/stripe-onboarding/screenshots/step-002.png",
+      "url": "https://dashboard.stripe.com/register",
+      "title": "Sign Up and Create a Stripe Account | Stripe",
+      "timestamp": "2026-03-03T17:19:59.390968",
+      "label": "Account Registration Form",
+      "step_type": "form",
+      "description": "User sees a Stripe account creation form with fields for email, full name, password, and country selection.",
+      "next_action": {
+        "type": "fill",
+        "selector": "input[name='full_name']",
+        "value": "John Smith",
+        "description": "Filling in the full name field"
+      },
+      "is_flow_complete": false
+    }
+  ]
+}

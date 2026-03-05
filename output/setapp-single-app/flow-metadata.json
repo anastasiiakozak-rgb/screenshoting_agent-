@@ -1,0 +1,9 @@
+{
+  "id": "setapp-single-app",
+  "name": "Setapp Single App Purchase Flow (Bartender)",
+  "goal": "Complete the full purchase flow for the Bartender app: go through plan selection, sign up with email and password, reach the payment page, fill in test card details, submit and reach the confirmation page.",
+  "email_used": "agent4nh4l68s@mailinator.com",
+  "captured_at": "2026-03-04T15:04:55.913697",
+  "step_count": 0,
+  "steps": []
+}

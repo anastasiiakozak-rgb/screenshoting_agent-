@@ -1,0 +1,25 @@
+{
+  "id": "2982efbd",
+  "name": "Analysis 2982efbd",
+  "goal": "Walk through the purchase flow from landing page to checkout. Stop before submitting payment.",
+  "email_used": "agenteyoqzyua@mailinator.com",
+  "captured_at": "2026-03-05T13:10:34.053808",
+  "step_count": 1,
+  "steps": [
+    {
+      "index": 0,
+      "label": "Landing Page",
+      "description": "CleanMyMac landing page showing product overview with options to try free or buy now.",
+      "url": "https://cleanmymac.com/",
+      "title": "CleanMyMac: The first MacBook cleaner that does it all",
+      "screenshot_path": "output/2982efbd/screenshots/step-000-landing_page.png",
+      "timestamp": "2026-03-05T13:10:34.025954",
+      "next_action": {
+        "type": "click",
+        "selector": "a.cta-button--green",
+        "value": "",
+        "description": "Click the green 'Buy Now' button to proceed to the purchase flow"
+      }
+    }
+  ]
+}

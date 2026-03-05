@@ -1,0 +1,1 @@
+{"id": "ee8e9f8b", "name": "Analysis ee8e9f8b", "start_url": "https://cleanmymac.com", "first_click": null, "first_click_fallback_url": null, "goal": "Walk through the purchase flow from landing page to checkout. Stop before submitting payment.", "max_steps": 15, "payment": null}

@@ -1,0 +1,25 @@
+{
+  "id": "50c2b007",
+  "name": "Flow: https://cleanmymac.com",
+  "goal": "Walk through the purchase flow from landing page to checkout. Stop before submitting payment.",
+  "email_used": "agent6ex0bvqo@mailinator.com",
+  "captured_at": "2026-03-05T13:22:09.768471",
+  "step_count": 1,
+  "steps": [
+    {
+      "index": 0,
+      "label": "Pricing Page",
+      "description": "CleanMyMac pricing page showing Basic and Plus plans with annual billing selected for 1 device",
+      "url": "https://macpaw.com/store/cleanmymac",
+      "title": "Choose the right CleanMyMac subscription plan",
+      "screenshot_path": "output/50c2b007/screenshots/step-000-pricing_page.png",
+      "timestamp": "2026-03-05T13:22:09.730664",
+      "next_action": {
+        "type": "click",
+        "selector": "button.cky-btn-reject",
+        "value": "",
+        "description": "First dismiss the cookie banner by clicking reject/decline button if present, otherwise click Buy Now on the Basic plan"
+      }
+    }
+  ]
+}

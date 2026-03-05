@@ -1,0 +1,40 @@
+{
+  "id": "bartender-purchase",
+  "name": "Bartender App Purchase Flow",
+  "goal": "Complete the purchase flow: from the app landing page through pricing, sign up, and reaching the payment/checkout page. Stop before submitting payment.",
+  "email_used": "agentfh8vbv8c@mailinator.com",
+  "captured_at": "2026-03-04T11:18:50.652585",
+  "step_count": 2,
+  "steps": [
+    {
+      "index": 0,
+      "label": "App Landing Page",
+      "description": "This is the Bartender app landing page on Setapp showing the app details, 98% rating, and two purchase options: 'Try free with Setapp' subscription and 'Buy now' for $9.99/year.",
+      "url": "https://setapp.com/apps/bartender",
+      "title": "Bartender \u2014 Download Mac app on Setapp | Organize menu bar | Setapp",
+      "screenshot_path": "output/bartender-purchase/screenshots/step-000-app_landing_page.png",
+      "timestamp": "2026-03-04T11:18:36.942064",
+      "next_action": {
+        "type": "click",
+        "selector": "button:has-text('Buy now')",
+        "value": "",
+        "description": "Clicking the 'Buy now' button to proceed with purchasing this app directly for $9.99/year"
+      }
+    },
+    {
+      "index": 1,
+      "label": "Plan Selection Page",
+      "description": "A subscription plan setup page for Bartender app showing a yearly subscription option at $9.99/year for 3 Macs with a Continue button.",
+      "url": "https://pay.macpaw.com/bartender/configure?svn=697398868.1772619495&redirectUrl=https://setapp.com/success?app=bartender%26type=single&returnUrl=https://setapp.com/apps/bartender&productId=3&planId=price_1Rbf0zLgyQHONn05kzbtJqYE",
+      "title": "MacPaw Pay",
+      "screenshot_path": "output/bartender-purchase/screenshots/step-001-plan_selection_page.png",
+      "timestamp": "2026-03-04T11:18:50.631991",
+      "next_action": {
+        "type": "click",
+        "selector": "button:contains('Continue')",
+        "value": "",
+        "description": "Click the Continue button to proceed to the account/payment step"
+      }
+    }
+  ]
+}

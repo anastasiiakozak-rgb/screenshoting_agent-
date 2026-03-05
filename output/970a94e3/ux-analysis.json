@@ -1,0 +1,56 @@
+[
+  {
+    "step_label": "Landing Page",
+    "overall_score": 7,
+    "summary": "Clean, visually appealing landing page with clear value proposition and prominent CTAs. The hero section effectively communicates the product's core benefits, but lacks social proof and specific feature details above the fold that could increase conversion confidence.",
+    "positives": [
+      "Strong visual hierarchy with clear headline and subheadline explaining product value",
+      "Dual CTA strategy (Try Free vs Buy Now) caters to different user intent levels",
+      "30-day money back guarantee reduces purchase anxiety",
+      "Consistent brand colors (pink/purple) create memorable visual identity",
+      "Simple navigation with minimal cognitive load (FAQ, Blog only)",
+      "Free trial prominently featured reduces barrier to entry"
+    ],
+    "issues": [
+      {
+        "severity": "major",
+        "issue": "No social proof visible above the fold - missing user reviews, ratings, download counts, or trust badges",
+        "recommendation": "Add App Store rating, number of users, or testimonial snippet directly below CTAs"
+      },
+      {
+        "severity": "major",
+        "issue": "Vague value proposition - 'free up a ton of space' lacks specificity",
+        "recommendation": "Include specific metrics like 'Average users free up 74GB' to make claims tangible"
+      },
+      {
+        "severity": "minor",
+        "issue": "Cookie consent banner partially obscures page content and lacks clear accept/reject options",
+        "recommendation": "Add explicit Accept/Reject buttons and reduce banner height"
+      },
+      {
+        "severity": "minor",
+        "issue": "The '30' in money-back guarantee appears as a small badge that may be overlooked",
+        "recommendation": "Make the 30-day guarantee more prominent with clearer typography"
+      }
+    ],
+    "friction_points": [
+      "Users may hesitate without seeing what the app actually looks like in action",
+      "No indication of pricing before clicking Buy Now creates uncertainty",
+      "Unclear what happens after the 7-day free trial ends",
+      "No feature list visible to help users understand specific capabilities"
+    ],
+    "best_practices_missing": [
+      "Product screenshots or demo video showing the interface",
+      "Pricing transparency on landing page",
+      "Trust indicators (press logos, security certifications, App Store badges)",
+      "Comparison with built-in Mac tools or competitors",
+      "Clear indication of system requirements"
+    ],
+    "quick_wins": [
+      "Add 'As featured in...' press logo bar below hero section",
+      "Include App Store rating badge near CTAs",
+      "Add small text under free trial CTA clarifying 'No credit card required'",
+      "Display a single compelling statistic (e.g., '10M+ Macs cleaned')"
+    ]
+  }
+]

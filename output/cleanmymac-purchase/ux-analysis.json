@@ -1,0 +1,218 @@
+[
+  {
+    "step_label": "Pricing Page",
+    "overall_score": 7,
+    "summary": "A clean, well-organized pricing page with clear tier differentiation and trust signals. The visual hierarchy effectively guides users toward the single Mac plan, though currency localization (Polish z\u0142oty) without language localization and some pricing clarity issues may cause friction for international users.",
+    "positives": [
+      "Clear visual distinction between plans with intuitive x2 and x5 badges for multi-Mac options",
+      "Strong trust signals including 30-day money back guarantee, secure payment encryption, and multiple payment method logos",
+      "Savings calculations prominently displayed in red for multi-Mac plans create clear value proposition",
+      "Pre-selected default option (1 Mac plan) reduces decision paralysis",
+      "Sticky 'You pay today' summary with prominent CTA keeps conversion action visible",
+      "Ukraine support banner adds brand authenticity without being intrusive"
+    ],
+    "issues": [
+      {
+        "severity": "major",
+        "issue": "Currency is in Polish z\u0142oty but page language is English, creating potential confusion for users about whether pricing is localized correctly",
+        "recommendation": "Either auto-detect and match language to currency region, or add a visible currency/region selector"
+      },
+      {
+        "severity": "major",
+        "issue": "Monthly pricing displayed as 'z\u01429.40/month' but billing is annual (z\u0142112.84/year), which could feel deceptive when users see the actual charge",
+        "recommendation": "Make the annual billing more prominent or show both monthly equivalent and total annual cost with equal visual weight"
+      },
+      {
+        "severity": "minor",
+        "issue": "The information icon (i) next to billing options is small and unclear what additional info it provides",
+        "recommendation": "Add tooltip on hover or expand to show comparison of billing cycles upfront"
+      },
+      {
+        "severity": "minor",
+        "issue": "No feature comparison between plans - users only see Mac quantity differences",
+        "recommendation": "Add a brief feature list or 'What's included' section to reinforce value"
+      }
+    ],
+    "friction_points": [
+      "Annual commitment shown as monthly price may cause sticker shock at checkout when full amount is charged",
+      "No free trial option visible - users must commit to paid plan immediately",
+      "Strikethrough prices (z\u014218.81, z\u014247.02) without context of what discount this represents (percentage off)",
+      "'One Time' purchase option exists but isn't selected - users may want to explore but fear losing their place"
+    ],
+    "best_practices_missing": [
+      "No social proof (customer count, reviews, ratings) on pricing page",
+      "Missing feature comparison table across plans",
+      "No FAQ section addressing common purchase concerns",
+      "No indication of what happens after purchase (download process, activation steps)",
+      "Missing 'Most Popular' or 'Best Value' badge to guide undecided users"
+    ],
+    "quick_wins": [
+      "Add 'Most Popular' badge to the 2 Macs plan to encourage upsells",
+      "Include percentage discount (e.g., 'Save 20%') alongside monetary savings",
+      "Add a single customer testimonial or review score near the CTA",
+      "Show '7-day free trial' if available to reduce commitment anxiety",
+      "Add subtle animation or checkmark when plan is selected to confirm user action"
+    ]
+  },
+  {
+    "step_label": "Payment Form",
+    "overall_score": 7,
+    "summary": "The payment form uses a clean modal overlay with clear price breakdown and trust signals. However, the two-step checkout process (details then payment) adds friction, and the form lacks input validation feedback and progress indication within the modal itself.",
+    "positives": [
+      "Clear order summary with itemized subtotal, VAT breakdown, and future renewal date",
+      "Country auto-detected as Poland, reducing user input",
+      "Trust signals visible in background (30-day money back, secure payment, 24/7 support)",
+      "Step indicator shows 'Your details \u2192 Payment' progression at top of modal",
+      "Checkbox for marketing emails is unchecked by default, respecting user privacy"
+    ],
+    "issues": [
+      {
+        "severity": "major",
+        "issue": "Email field is empty with no inline validation or format guidance",
+        "recommendation": "Add real-time email validation with clear error states and helper text showing expected format"
+      },
+      {
+        "severity": "major",
+        "issue": "Duplicate pricing shown (PLN 112.31 in modal vs z\u0142112.84 in background) creates confusion about actual price",
+        "recommendation": "Ensure consistent pricing display or fully obscure background content when modal is open"
+      },
+      {
+        "severity": "minor",
+        "issue": "Required field indicators (*) lack explanation for users unfamiliar with the convention",
+        "recommendation": "Add '* Required' label near form fields or use explicit 'Required' text"
+      },
+      {
+        "severity": "minor",
+        "issue": "Close button (X) placement could lead to accidental abandonment without confirmation",
+        "recommendation": "Add confirmation dialog when closing with entered data, or save form state"
+      }
+    ],
+    "friction_points": [
+      "Two-step process within modal (details \u2192 payment) feels unnecessarily lengthy for just email collection",
+      "User cannot see what payment methods are available until next step",
+      "Renewal date of March 2027 shown prominently may remind users this is a recurring commitment",
+      "Background showing alternative pricing options (z\u0142147.02 crossed out) visible but not clickable creates distraction"
+    ],
+    "best_practices_missing": [
+      "No guest checkout option visible - email appears mandatory",
+      "Missing form field focus states to guide user attention",
+      "No estimated time to complete checkout",
+      "Payment method icons (Visa, MC, PayPal) only visible in background, not in modal",
+      "No security badges or SSL indicators within the payment modal itself"
+    ],
+    "quick_wins": [
+      "Add payment method icons inside the modal to set expectations",
+      "Include a small lock icon near 'Continue' button to reinforce security",
+      "Dim or blur background more heavily to focus attention on modal",
+      "Add placeholder text in email field (e.g., 'you@example.com')"
+    ]
+  },
+  {
+    "step_label": "Payment Form",
+    "overall_score": 7,
+    "summary": "This checkout overlay effectively summarizes the order with clear pricing breakdown including VAT. The form is minimal with only essential fields, but the modal design partially obscures background content creating visual clutter. Trust signals are present but could be more prominent at this critical conversion point.",
+    "positives": [
+      "Clear price breakdown showing subtotal, VAT, and renewal date upfront - no hidden costs",
+      "Minimal form fields (email and country only) reduce friction at this stage",
+      "Product details with icon provide clear confirmation of what's being purchased",
+      "Opt-in marketing checkbox is unchecked by default (GDPR compliant)",
+      "30-day money back guarantee visible below the modal builds confidence"
+    ],
+    "issues": [
+      {
+        "severity": "major",
+        "issue": "Modal overlay allows distracting background content to show through, including competing pricing cards",
+        "recommendation": "Use a darker overlay or full-page checkout to eliminate visual competition and focus user attention"
+      },
+      {
+        "severity": "major",
+        "issue": "No indication of how many steps remain in checkout process",
+        "recommendation": "Add a progress indicator (e.g., 'Step 1 of 2') to set expectations and reduce abandonment"
+      },
+      {
+        "severity": "minor",
+        "issue": "Email field shows a test/disposable email address pattern which suggests potential validation gaps",
+        "recommendation": "Implement email validation to warn users about disposable email domains that may cause delivery issues"
+      },
+      {
+        "severity": "minor",
+        "issue": "Close (X) button is small and could lead to accidental abandonment",
+        "recommendation": "Add confirmation dialog if user attempts to close with data entered, or make close action less prominent"
+      }
+    ],
+    "friction_points": [
+      "Users might hesitate seeing 'then PLN 112.31 yearly' renewal without clear cancellation info",
+      "No ability to modify quantity or plan from this modal - requires closing and starting over",
+      "Paddle.com mentioned as merchant of record may confuse users expecting MacPaw billing",
+      "Country dropdown defaults to Poland based on IP - users may worry about currency/regional issues"
+    ],
+    "best_practices_missing": [
+      "No security badges or SSL indicators within the modal itself",
+      "Missing guest checkout vs account creation clarity",
+      "No order modification options (change plan, add coupon code)",
+      "No live chat or support option visible during checkout",
+      "Missing estimated delivery/activation time despite 'Instant Activation' claim below"
+    ],
+    "quick_wins": [
+      "Add 'Step 1 of 2: Your Details' header to set clear expectations",
+      "Move trust badges (Visa, Mastercard, PayPal) inside the modal near Continue button",
+      "Add a promo code field or 'Have a coupon?' link",
+      "Include a small lock icon next to 'Continue' button with 'Secure checkout' text"
+    ]
+  },
+  {
+    "step_label": "Payment Form",
+    "overall_score": 7,
+    "summary": "The payment form is clean and follows standard conventions with clear pricing breakdown and multiple payment options. However, the modal approach creates some visual clutter with the background page showing through, and there are missed opportunities for trust-building at this critical conversion point.",
+    "positives": [
+      "Clear price breakdown showing subtotal, VAT, and total due today vs future renewal",
+      "Multiple payment options (PayPal and card) prominently displayed",
+      "Trust signals present: 30-day money back guarantee, secure payment encryption, easy cancellation",
+      "Card brand logos (Visa, Mastercard, Amex, Discover) visible for quick recognition",
+      "VAT number option available for business customers",
+      "Clear product identification with icon and subscription details"
+    ],
+    "issues": [
+      {
+        "severity": "major",
+        "issue": "Background page visible behind modal creates visual noise and distraction during critical payment step",
+        "recommendation": "Use a darker overlay or full-page checkout to focus user attention entirely on payment"
+      },
+      {
+        "severity": "major",
+        "issue": "Security indicators are weak - no visible padlock icon, SSL badge, or security certification near the payment form fields",
+        "recommendation": "Add a padlock icon near card fields and display SSL/security badge adjacent to the Subscribe button"
+      },
+      {
+        "severity": "minor",
+        "issue": "Renewal date shown as 'Due on 5 March 2027' seems incorrect for a yearly subscription purchased in 2024",
+        "recommendation": "Verify renewal date calculation logic and display accurate renewal timing"
+      },
+      {
+        "severity": "minor",
+        "issue": "Name on card field lacks placeholder text or formatting guidance",
+        "recommendation": "Add placeholder like 'John Smith' to guide proper name entry"
+      }
+    ],
+    "friction_points": [
+      "User may hesitate seeing full yearly charge of PLN 112.31 due immediately without monthly option visible",
+      "No order editing capability visible - user must close modal to change plan",
+      "Email shown (agent6981umug@mailinator.com) is a test email - in production, users may worry if wrong email displayed",
+      "Two price displays visible (modal shows 112.31, background shows 112.84) creating potential confusion"
+    ],
+    "best_practices_missing": [
+      "No inline validation indicators for form fields before submission",
+      "Missing card number auto-formatting with spaces for readability",
+      "No saved payment method option for returning customers",
+      "No billing address fields which may cause payment failures in some regions",
+      "Missing explicit confirmation of what happens after trial/subscription terms"
+    ],
+    "quick_wins": [
+      "Add a small padlock icon inside or next to the card number field",
+      "Include real-time form validation with green checkmarks as fields are completed",
+      "Add 'Secure checkout' text near the Subscribe button",
+      "Darken the background overlay to 80%+ opacity to reduce distraction",
+      "Add tooltip explaining the VAT breakdown for transparency"
+    ]
+  }
+]

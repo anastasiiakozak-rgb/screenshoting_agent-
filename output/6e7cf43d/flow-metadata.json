@@ -1,0 +1,40 @@
+{
+  "id": "6e7cf43d",
+  "name": "Flow: https://cleanmymac.com",
+  "goal": "Walk through the purchase flow from landing page to checkout. Stop before submitting payment.",
+  "email_used": "agentx677g2hp@mailinator.com",
+  "captured_at": "2026-03-05T13:22:57.357483",
+  "step_count": 2,
+  "steps": [
+    {
+      "index": 0,
+      "label": "Pricing Page",
+      "description": "CleanMyMac pricing page showing Basic ($3.35/month) and Plus ($5.45/month) annual plans for 1 device.",
+      "url": "https://macpaw.com/store/cleanmymac",
+      "title": "Choose the right CleanMyMac subscription plan",
+      "screenshot_path": "output/6e7cf43d/screenshots/step-000-pricing_page.png",
+      "timestamp": "2026-03-05T13:22:18.750638",
+      "next_action": {
+        "type": "click",
+        "selector": "button:has-text('Buy Now')",
+        "value": "",
+        "description": "Click the Buy Now button on the Basic plan to proceed to checkout"
+      }
+    },
+    {
+      "index": 1,
+      "label": "Pricing Page",
+      "description": "CleanMyMac pricing page showing Basic ($3.35/month) and Plus ($5.45/month) annual subscription plans for 1 device.",
+      "url": "https://macpaw.com/store/cleanmymac",
+      "title": "Choose the right CleanMyMac subscription plan",
+      "screenshot_path": "output/6e7cf43d/screenshots/step-001-pricing_page.png",
+      "timestamp": "2026-03-05T13:22:27.342635",
+      "next_action": {
+        "type": "click",
+        "selector": "button:has-text('Buy Now')",
+        "value": "",
+        "description": "Click the Buy Now button on the Basic plan to proceed to checkout"
+      }
+    }
+  ]
+}

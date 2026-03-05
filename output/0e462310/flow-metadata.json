@@ -1,0 +1,85 @@
+{
+  "id": "0e462310",
+  "name": "Flow: https://cleanmymac.com",
+  "goal": "Walk through the purchase flow from landing page to checkout. Stop before submitting payment.",
+  "email_used": "agent9hxd4cxl@mailinator.com",
+  "captured_at": "2026-03-05T13:25:57.216747",
+  "step_count": 5,
+  "steps": [
+    {
+      "index": 0,
+      "label": "Pricing Page",
+      "description": "CleanMyMac pricing page showing Basic ($3.35/month) and Plus ($5.45/month) annual subscription plans for 1 device.",
+      "url": "https://macpaw.com/store/cleanmymac",
+      "title": "Choose the right CleanMyMac subscription plan",
+      "screenshot_path": "output/0e462310/screenshots/step-000-pricing_page.png",
+      "timestamp": "2026-03-05T13:25:27.819257",
+      "next_action": {
+        "type": "click",
+        "selector": "button:has-text('Buy Now')",
+        "value": "",
+        "description": "Click the Buy Now button on the Basic plan to proceed to checkout"
+      }
+    },
+    {
+      "index": 1,
+      "label": "Checkout Details Form",
+      "description": "Order summary page showing CleanMyMac Basic Annual subscription for $40.20 with form fields for email, country, and ZIP code.",
+      "url": "https://macpaw.com/store/cleanmymac",
+      "title": "Choose the right CleanMyMac subscription plan",
+      "screenshot_path": "output/0e462310/screenshots/step-001-checkout_details_form.png",
+      "timestamp": "2026-03-05T13:25:36.581797",
+      "next_action": {
+        "type": "fill",
+        "selector": "input[type='email']",
+        "value": "agent9hxd4cxl@mailinator.com",
+        "description": "Filling in the email address field with the disposable email"
+      }
+    },
+    {
+      "index": 2,
+      "label": "Checkout Details Form",
+      "description": "Order summary page showing CleanMyMac Basic Annual for $40.20 with email, country, and ZIP/Postcode fields to fill.",
+      "url": "https://macpaw.com/store/cleanmymac",
+      "title": "Choose the right CleanMyMac subscription plan",
+      "screenshot_path": "output/0e462310/screenshots/step-002-checkout_details_form.png",
+      "timestamp": "2026-03-05T13:25:41.467582",
+      "next_action": {
+        "type": "fill",
+        "selector": "input[name='postcode']",
+        "value": "10001",
+        "description": "Filling in the ZIP/Postcode field with a valid US zip code"
+      }
+    },
+    {
+      "index": 3,
+      "label": "Checkout Details Form",
+      "description": "A checkout form requesting email address, country, and ZIP/postcode with an order summary showing CleanMyMac Basic Annual subscription for $40.20.",
+      "url": "https://macpaw.com/store/cleanmymac",
+      "title": "Choose the right CleanMyMac subscription plan",
+      "screenshot_path": "output/0e462310/screenshots/step-003-checkout_details_form.png",
+      "timestamp": "2026-03-05T13:25:46.737188",
+      "next_action": {
+        "type": "click",
+        "selector": "button:has-text('Continue')",
+        "value": "",
+        "description": "Click the Continue button to proceed to the payment form"
+      }
+    },
+    {
+      "index": 4,
+      "label": "Payment Form",
+      "description": "A checkout payment form showing order summary for CleanMyMac Basic Annual subscription with card number input field, PayPal option, and payment details fields.",
+      "url": "https://macpaw.com/store/cleanmymac",
+      "title": "Choose the right CleanMyMac subscription plan",
+      "screenshot_path": "output/0e462310/screenshots/step-004-payment_form.png",
+      "timestamp": "2026-03-05T13:25:57.216372",
+      "next_action": {
+        "type": "none",
+        "selector": "",
+        "value": "",
+        "description": "Stopping as we have reached the payment form with card number input field. The goal was to walk through purchase flow and stop before submitting payment."
+      }
+    }
+  ]
+}

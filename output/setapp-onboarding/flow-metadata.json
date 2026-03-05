@@ -1,0 +1,44 @@
+{
+  "id": "setapp-onboarding",
+  "name": "Setapp Onboarding Flow",
+  "captured_at": "2026-03-04T10:54:24.946557",
+  "step_count": 4,
+  "steps": [
+    {
+      "index": 0,
+      "label": "Landing Page",
+      "action": "navigate",
+      "url": "https://setapp.com/",
+      "title": "Setapp | Powerful apps for Mac & iOS",
+      "screenshot_path": "output/setapp-onboarding/screenshots/step-000.png",
+      "timestamp": "2026-03-04T10:53:48.075698"
+    },
+    {
+      "index": 1,
+      "label": "Sign Up Page",
+      "action": "screenshot",
+      "url": "https://setapp.com/",
+      "title": "Setapp | Powerful apps for Mac & iOS",
+      "screenshot_path": "output/setapp-onboarding/screenshots/step-001.png",
+      "timestamp": "2026-03-04T10:53:49.988467"
+    },
+    {
+      "index": 2,
+      "label": "Plans Page",
+      "action": "navigate",
+      "url": "https://account.setapp.com/membership/trial",
+      "title": "Setapp | Personal User Account",
+      "screenshot_path": "output/setapp-onboarding/screenshots/step-002.png",
+      "timestamp": "2026-03-04T10:54:10.512548"
+    },
+    {
+      "index": 3,
+      "label": "Checkout Page",
+      "action": "navigate",
+      "url": "https://account.setapp.com/membership/checkout",
+      "title": "Setapp | Personal User Account",
+      "screenshot_path": "output/setapp-onboarding/screenshots/step-003.png",
+      "timestamp": "2026-03-04T10:54:24.946384"
+    }
+  ]
+}
