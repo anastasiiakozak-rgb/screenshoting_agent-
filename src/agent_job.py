@@ -52,7 +52,7 @@ async def wait_for_page_settle(page, timeout=10000):
         await page.wait_for_load_state("networkidle", timeout=timeout)
     except Exception:
         pass
-    await page.wait_for_timeout(3000)
+    await page.wait_for_timeout(5000)  # increased for slower servers
 
 async def dismiss_overlays(page):
     selectors = [
@@ -309,7 +309,8 @@ async def run_agent(run_config, page):
             curr_label = analysis.get("label")
             if prev_label == curr_label:
                 stuck_count += 1
-                if stuck_count >= 4:
+                print(f"  ⚠️  Same page and same label (stuck count: {stuck_count})")
+                if stuck_count >= 8:  # higher threshold for server
                     print("  ⏹️  Stuck — stopping.")
                     break
             else:
