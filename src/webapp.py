@@ -1,7 +1,7 @@
 # ============================================================
 # WEB APP: Screenshot Flow Capture Tool
 # ============================================================
-# Run: PORT=5001 python3 src/webapp.py
+# Run: python src/webapp.py
 # Open: http://localhost:5001
 
 import json
@@ -10,6 +10,8 @@ import sys
 import threading
 import uuid
 import zipfile
+import asyncio
+import importlib.util
 from pathlib import Path
 
 from flask import Flask, jsonify, render_template_string, request, send_file
@@ -19,10 +21,11 @@ load_dotenv()
 
 app = Flask(__name__)
 PROJECT_DIR = Path(__file__).parent.parent
+(PROJECT_DIR / "output").mkdir(exist_ok=True)
 jobs = {}
 
 # ------------------------------------------------------------
-# HOME PAGE
+# HTML: HOME PAGE
 # ------------------------------------------------------------
 
 HOME_HTML = """
@@ -96,17 +99,13 @@ HOME_HTML = """
   <div class="card">
     <h1>📸 Flow Screenshot Tool</h1>
     <p class="subtitle">Enter a URL and goal — the agent will walk through the flow and capture every step.</p>
-
     <form id="form">
       <label>Product URL</label>
       <input type="url" id="url" placeholder="https://cleanmymac.com" required />
-
       <label>What flow to capture?</label>
       <textarea id="goal" placeholder="e.g. Walk through the purchase flow from landing page to checkout. Stop before submitting payment." required></textarea>
-
       <button type="submit" id="btn">Capture Flow →</button>
     </form>
-
     <div class="chips">
       <p>Examples:</p>
       <span class="chip" onclick="fill('https://cleanmymac.com', 'Walk through the purchase flow from landing page to checkout. Stop before submitting payment.')">CleanMyMac purchase</span>
@@ -114,19 +113,16 @@ HOME_HTML = """
       <span class="chip" onclick="fill('https://setapp.com', 'Walk through the membership signup flow.')">Setapp signup</span>
     </div>
   </div>
-
   <script>
     function fill(url, goal) {
       document.getElementById('url').value = url;
       document.getElementById('goal').value = goal;
     }
-
     document.getElementById('form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btn');
       btn.textContent = 'Starting...';
       btn.disabled = true;
-
       const res = await fetch('/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -135,7 +131,6 @@ HOME_HTML = """
           goal: document.getElementById('goal').value,
         })
       });
-
       const data = await res.json();
       if (data.job_id) window.location.href = '/status/' + data.job_id;
     });
@@ -145,7 +140,7 @@ HOME_HTML = """
 """
 
 # ------------------------------------------------------------
-# STATUS PAGE
+# HTML: STATUS PAGE
 # ------------------------------------------------------------
 
 STATUS_HTML = """
@@ -205,11 +200,9 @@ STATUS_HTML = """
       font-size: 15px;
       font-weight: 600;
       text-decoration: none;
-      cursor: pointer;
     }
     .btn-primary { background: #0066ff; color: white; }
     .btn-secondary { background: #f0f0f0; color: #333; }
-    .btn:hover { opacity: 0.9; }
   </style>
 </head>
 <body>
@@ -219,17 +212,13 @@ STATUS_HTML = """
     <p class="msg" id="msg">Starting browser...</p>
     <div class="log" id="log"></div>
   </div>
-
   <script>
     const jobId = "{{ job_id }}";
     let lastLog = 0;
-
     async function poll() {
       const res = await fetch('/job/' + jobId);
       const data = await res.json();
-
       document.getElementById('msg').textContent = data.message || '';
-
       if (data.log && data.log.length > lastLog) {
         const logEl = document.getElementById('log');
         data.log.slice(lastLog).forEach(line => {
@@ -238,14 +227,11 @@ STATUS_HTML = """
         logEl.scrollTop = logEl.scrollHeight;
         lastLog = data.log.length;
       }
-
       if (data.status === 'done') {
         document.getElementById('card').innerHTML = `
           <div style="font-size:56px;margin-bottom:16px">✅</div>
           <h1>Flow Captured!</h1>
-          <p class="msg" style="margin-bottom:24px">
-            ${data.step_count} screenshot(s) captured
-          </p>
+          <p class="msg" style="margin-bottom:24px">${data.step_count} screenshot(s) captured</p>
           <a href="/gallery/${jobId}" class="btn btn-primary">🖼️ View Gallery</a>
           <a href="/download/${jobId}" class="btn btn-secondary">⬇️ Download ZIP</a>
           <p style="margin-top:20px;font-size:13px;color:#999">
@@ -263,7 +249,6 @@ STATUS_HTML = """
         setTimeout(poll, 2000);
       }
     }
-
     poll();
   </script>
 </body>
@@ -271,7 +256,7 @@ STATUS_HTML = """
 """
 
 # ------------------------------------------------------------
-# GALLERY PAGE
+# HTML: GALLERY PAGE
 # ------------------------------------------------------------
 
 GALLERY_HTML = """
@@ -282,74 +267,23 @@ GALLERY_HTML = """
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f5f5f7;
-      padding: 32px 20px;
-    }
-    .header {
-      max-width: 1100px;
-      margin: 0 auto 32px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f7; padding: 32px 20px; }
+    .header { max-width: 1100px; margin: 0 auto 32px; display: flex; justify-content: space-between; align-items: center; }
     h1 { font-size: 24px; font-weight: 700; }
-    .actions a {
-      display: inline-block;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      margin-left: 8px;
-    }
-    .btn-primary { background: #0066ff; color: white; }
-    .btn-secondary { background: white; color: #333; border: 1px solid #ddd; }
-    .grid {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 20px;
-    }
-    .step-card {
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .step-card img {
-      width: 100%;
-      display: block;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-    .step-card img:hover { opacity: 0.9; }
-    .step-info {
-      padding: 14px 16px;
-      border-top: 1px solid #f0f0f0;
-    }
+    .grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+    .step-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .step-card img { width: 100%; display: block; cursor: pointer; }
+    .step-info { padding: 14px 16px; border-top: 1px solid #f0f0f0; }
     .step-num { font-size: 12px; color: #999; margin-bottom: 2px; }
     .step-label { font-size: 15px; font-weight: 600; }
-    .step-url { font-size: 12px; color: #999; margin-top: 2px;
-                white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    /* Lightbox */
-    .lightbox {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.85);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
-    }
+    .step-url { font-size: 12px; color: #999; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .btn { display: inline-block; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; margin-left: 8px; }
+    .btn-primary { background: #0066ff; color: white; }
+    .btn-secondary { background: white; color: #333; border: 1px solid #ddd; }
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; }
     .lightbox.active { display: flex; }
     .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 8px; }
-    .lightbox-close {
-      position: fixed; top: 20px; right: 24px;
-      color: white; font-size: 32px; cursor: pointer;
-    }
+    .lightbox-close { position: fixed; top: 20px; right: 24px; color: white; font-size: 32px; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -358,18 +292,15 @@ GALLERY_HTML = """
       <h1>📸 {{ name }}</h1>
       <p style="color:#666;margin-top:4px;font-size:14px">{{ step_count }} steps captured</p>
     </div>
-    <div class="actions">
-      <a href="/download/{{ job_id }}" class="actions btn-primary" style="padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;background:#0066ff;color:white">⬇️ Download ZIP</a>
-      <a href="/" class="actions btn-secondary" style="padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;background:white;color:#333;border:1px solid #ddd;margin-left:8px">← New capture</a>
+    <div>
+      <a href="/download/{{ job_id }}" class="btn btn-primary">⬇️ Download ZIP</a>
+      <a href="/" class="btn btn-secondary">← New capture</a>
     </div>
   </div>
-
   <div class="grid">
     {% for step in steps %}
     <div class="step-card">
-      <img src="/screenshot/{{ job_id }}/{{ step.filename }}"
-           onclick="openLightbox(this.src)"
-           alt="{{ step.label }}" />
+      <img src="/screenshot/{{ job_id }}/{{ step.filename }}" onclick="openLightbox(this.src)" alt="{{ step.label }}" />
       <div class="step-info">
         <div class="step-num">Step {{ step.index + 1 }}</div>
         <div class="step-label">{{ step.label }}</div>
@@ -378,12 +309,10 @@ GALLERY_HTML = """
     </div>
     {% endfor %}
   </div>
-
   <div class="lightbox" id="lightbox" onclick="closeLightbox()">
     <span class="lightbox-close">✕</span>
     <img id="lightbox-img" src="" />
   </div>
-
   <script>
     function openLightbox(src) {
       document.getElementById('lightbox-img').src = src;
@@ -399,18 +328,16 @@ GALLERY_HTML = """
 """
 
 # ------------------------------------------------------------
-# FALLBACK URLS — known store/pricing pages per domain
+# FALLBACK URLS
 # ------------------------------------------------------------
 
 def get_fallback_url(url: str):
-    """Returns a known pricing/store URL for common products."""
     if "cleanmymac" in url:
         return "https://macpaw.com/store/cleanmymac"
     if "setapp" in url:
         return "https://setapp.com/membership/join"
     if "notion" in url:
         return "https://www.notion.so/signup"
-    # For unknown URLs, just return None and let the agent figure it out
     return None
 
 # ------------------------------------------------------------
@@ -421,20 +348,16 @@ def run_pipeline(job_id: str, url: str, goal: str):
     job = jobs[job_id]
     log = []
 
-    def update(msg, step=None):
+    def update(msg):
         job["message"] = msg
         log.append(msg)
         job["log"] = log
-        if step is not None:
-            job["step"] = step
         print(msg)
 
     try:
-        import subprocess
         output_dir = PROJECT_DIR / f"output/{job_id}"
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        # Write config for agent_job.py
         config = {
             "id": job_id,
             "name": f"Flow: {url}",
@@ -448,39 +371,60 @@ def run_pipeline(job_id: str, url: str, goal: str):
         config_path = output_dir / "job_config.json"
         config_path.write_text(json.dumps(config))
 
-        update("🌐 Opening browser...", step=0)
+        update("🌐 Opening browser...")
 
-        # Use the same Python interpreter that's running the webapp
-        # This ensures venv packages (anthropic, playwright) are available
-        python_exe = sys.executable
-
-        result = subprocess.run(
-            [python_exe, "src/agent_job.py", str(config_path)],
-            cwd=PROJECT_DIR,
-            capture_output=True,
-            text=True,
-            timeout=300,
+        # Load agent_job module
+        sys.path.insert(0, str(PROJECT_DIR / "src"))
+        spec = importlib.util.spec_from_file_location(
+            "agent_job", str(PROJECT_DIR / "src/agent_job.py")
         )
+        agent_mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(agent_mod)
 
-        # Stream agent output to log
-        for line in result.stdout.splitlines():
-            if line.strip():
-                log.append(line)
-        job["log"] = log
+        from playwright.async_api import async_playwright
 
-        if result.returncode != 0:
-            raise Exception(result.stderr[:300] or "Agent failed")
+        async def run():
+            async with async_playwright() as p:
+                browser = await p.chromium.launch(
+                    headless=True,
+                    args=[
+                        "--no-sandbox",
+                        "--disable-setuid-sandbox",
+                        "--disable-blink-features=AutomationControlled",
+                        "--disable-dev-shm-usage",
+                    ],
+                )
+                context = await browser.new_context(
+                    viewport={"width": 1440, "height": 900},
+                    user_agent=(
+                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                        "AppleWebKit/537.36 (KHTML, like Gecko) "
+                        "Chrome/120.0.0.0 Safari/537.36"
+                    ),
+                )
+                page = await context.new_page()
+                await agent_mod.run_agent(config, page)
+                await browser.close()
+
+        # Use new event loop for thread safety
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            loop.run_until_complete(run())
+        finally:
+            loop.close()
+
+        update("✅ Screenshots captured!")
 
         # Read metadata
         metadata_path = output_dir / "flow-metadata.json"
         if not metadata_path.exists():
-            raise Exception("No screenshots captured — flow may have failed to navigate")
+            raise Exception("No screenshots captured")
 
         with open(metadata_path) as f:
             metadata = json.load(f)
 
         steps = metadata.get("steps", [])
-        update(f"✅ Captured {len(steps)} screenshot(s)!")
 
         job.update({
             "status": "done",
@@ -488,8 +432,6 @@ def run_pipeline(job_id: str, url: str, goal: str):
             "metadata": metadata,
         })
 
-    except subprocess.TimeoutExpired:
-        job.update({"status": "error", "message": "Timed out after 5 minutes"})
     except Exception as e:
         job.update({"status": "error", "message": str(e)})
 
@@ -506,14 +448,12 @@ def start():
     data = request.json or {}
     url = data.get("url", "").strip()
     goal = data.get("goal", "").strip()
-
     if not url or not goal:
         return jsonify({"error": "URL and goal required"}), 400
 
     job_id = str(uuid.uuid4())[:8]
     jobs[job_id] = {
         "status": "running",
-        "step": 0,
         "message": "Starting...",
         "log": [],
         "url": url,
@@ -532,8 +472,7 @@ def status(job_id):
 
 @app.route("/job/<job_id>")
 def job_status(job_id):
-    job = jobs.get(job_id, {})
-    return jsonify(job)
+    return jsonify(jobs.get(job_id, {"status": "error", "message": "Job not found"}))
 
 @app.route("/gallery/<job_id>")
 def gallery(job_id):
