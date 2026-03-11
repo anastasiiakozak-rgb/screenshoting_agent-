@@ -390,7 +390,21 @@ def run_pipeline(job_id: str, url: str, goal: str):
                 if browserless_token:
                     print("  🌐 Connecting to Browserless cloud browser...")
                     browser = await p.chromium.connect_over_cdp(
-                        f"wss://chrome.browserless.io?token={browserless_token}&--disable-blink-features=AutomationControlled"
+                        f"wss://chrome.browserless.io?token={browserless_token}",
+                        timeout=30000,
+                    )
+                    context = await browser.new_context(
+                        viewport={"width": 1440, "height": 900},
+                        user_agent=(
+                            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                            "AppleWebKit/537.36 (KHTML, like Gecko) "
+                            "Chrome/120.0.0.0 Safari/537.36"
+                        ),
+                        locale="en-US",
+                        timezone_id="America/New_York",
+                        extra_http_headers={
+                            "Accept-Language": "en-US,en;q=0.9",
+                        },
                     )
                 else:
                     print("  🖥️  Launching local browser...")
@@ -403,24 +417,23 @@ def run_pipeline(job_id: str, url: str, goal: str):
                             "--disable-dev-shm-usage",
                         ],
                     )
-                context = await browser.new_context(
-                    viewport={"width": 1440, "height": 900},
-                    user_agent=(
-                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                        "AppleWebKit/537.36 (KHTML, like Gecko) "
-                        "Chrome/120.0.0.0 Safari/537.36"
-                    ),
-                    locale="en-US",
-                    timezone_id="America/New_York",
-                    extra_http_headers={
-                        "Accept-Language": "en-US,en;q=0.9",
-                    },
-                )
+                    context = await browser.new_context(
+                        viewport={"width": 1440, "height": 900},
+                        user_agent=(
+                            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                            "AppleWebKit/537.36 (KHTML, like Gecko) "
+                            "Chrome/120.0.0.0 Safari/537.36"
+                        ),
+                    )
+
                 await context.add_init_script("""
                     Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
                     Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3] });
                     Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] });
                 """)
+                page = await context.new_page()
+                await agent_mod.run_agent(config, page)
+                await browser.close()
                 page = await context.new_page()
                 await agent_mod.run_agent(config, page)
                 await browser.close()
