@@ -383,17 +383,26 @@ def run_pipeline(job_id: str, url: str, goal: str):
 
         from playwright.async_api import async_playwright
 
+        browserless_token = os.environ.get("BROWSERLESS_TOKEN")
+
         async def run():
             async with async_playwright() as p:
-                browser = await p.chromium.launch(
-                    headless=True,
-                    args=[
-                        "--no-sandbox",
-                        "--disable-setuid-sandbox",
-                        "--disable-blink-features=AutomationControlled",
-                        "--disable-dev-shm-usage",
-                    ],
-                )
+                if browserless_token:
+                    print("  🌐 Connecting to Browserless cloud browser...")
+                    browser = await p.chromium.connect_over_cdp(
+                        f"wss://chrome.browserless.io?token={browserless_token}&--disable-blink-features=AutomationControlled"
+                    )
+                else:
+                    print("  🖥️  Launching local browser...")
+                    browser = await p.chromium.launch(
+                        headless=True,
+                        args=[
+                            "--no-sandbox",
+                            "--disable-setuid-sandbox",
+                            "--disable-blink-features=AutomationControlled",
+                            "--disable-dev-shm-usage",
+                        ],
+                    )
                 context = await browser.new_context(
                     viewport={"width": 1440, "height": 900},
                     user_agent=(
@@ -401,7 +410,20 @@ def run_pipeline(job_id: str, url: str, goal: str):
                         "AppleWebKit/537.36 (KHTML, like Gecko) "
                         "Chrome/120.0.0.0 Safari/537.36"
                     ),
+                    locale="en-US",
+                    timezone_id="America/New_York",
+                    extra_http_headers={
+                        "Accept-Language": "en-US,en;q=0.9",
+                    },
                 )
+                await context.add_init_script("""
+                    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+                    Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3] });
+                    Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] });
+                """)
+                page = await context.new_page()
+                await agent_mod.run_agent(config, page)
+                await browser.close()
                 page = await context.new_page()
                 await agent_mod.run_agent(config, page)
                 await browser.close()

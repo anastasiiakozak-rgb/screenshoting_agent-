@@ -338,16 +338,23 @@ async def main():
     with open(config_path) as f:
         config = json.load(f)
 
+    browserless_token = os.getenv("BROWSERLESS_TOKEN")
+
     async with async_playwright() as p:
-        browser = await p.chromium.launch(
-            headless=True,
-            args=[
-                "--no-sandbox",
-                "--disable-setuid-sandbox",
-                "--disable-blink-features=AutomationControlled",
-                "--disable-dev-shm-usage",
-            ],
-        )
+        if browserless_token:
+            # Use Browserless cloud browser (for Render deployment)
+            print("  🌐 Connecting to Browserless cloud browser...")
+            browser = await p.chromium.connect_over_cdp(
+                f"wss://chrome.browserless.io?token={browserless_token}&--disable-blink-features=AutomationControlled"
+            )
+        else:
+            # Fall back to local browser (for development)
+            print("  🖥️  Launching local browser...")
+            browser = await p.chromium.launch(
+                headless=False,
+                args=["--no-sandbox", "--disable-blink-features=AutomationControlled"],
+            )
+
         context = await browser.new_context(
             viewport={"width": 1440, "height": 900},
             user_agent=(
@@ -355,7 +362,17 @@ async def main():
                 "AppleWebKit/537.36 (KHTML, like Gecko) "
                 "Chrome/120.0.0.0 Safari/537.36"
             ),
+            locale="en-US",
+            timezone_id="America/New_York",
+            extra_http_headers={
+                "Accept-Language": "en-US,en;q=0.9",
+            },
         )
+        await context.add_init_script("""
+            Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+            Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3] });
+            Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] });
+        """)
         page = await context.new_page()
         await run_agent(config, page)
         await browser.close()
