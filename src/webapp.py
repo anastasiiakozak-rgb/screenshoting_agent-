@@ -389,8 +389,9 @@ def run_pipeline(job_id: str, url: str, goal: str):
             async with async_playwright() as p:
                 if browserless_token:
                     print("  🌐 Connecting to Browserless cloud browser...")
+                    # Use stealth mode to bypass CAPTCHA detection
                     browser = await p.chromium.connect_over_cdp(
-                        f"wss://chrome.browserless.io?token={browserless_token}",
+                        f"wss://production-sfo.browserless.io/chromium/stealth?token={browserless_token}",
                         timeout=30000,
                     )
                     context = await browser.new_context(
@@ -431,6 +432,9 @@ def run_pipeline(job_id: str, url: str, goal: str):
                     Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3] });
                     Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] });
                 """)
+                page = await context.new_page()
+                await agent_mod.run_agent(config, page)
+                await browser.close()
                 page = await context.new_page()
                 await agent_mod.run_agent(config, page)
                 await browser.close()
